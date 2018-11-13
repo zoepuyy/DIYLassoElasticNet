@@ -1,4 +1,4 @@
-# Simulate Data
+# Simulate Data (as proposed in the pset instructions)
 #### "true" dgp:
 #### y = XB + e, e ~ N(0, sig)
 #### Let β = (3, 1.5, 0, 0, 2, 0, 0, 0)T and σ = 3. The pairwise correlation between xi and xj
@@ -22,8 +22,3 @@ X <- mvtnorm::rmvnorm(240, sigma = Var_X)
 
 # y
 y <- X %*% betas + rnorm(240, 0, 3)
-
-
-
-source("R/coordinate_descent_lasso.R")
-coordinate_descent(y, X, lambda = .5)
