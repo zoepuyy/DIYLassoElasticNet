@@ -22,3 +22,6 @@ X <- mvtnorm::rmvnorm(240, sigma = Var_X)
 
 # y
 y <- X %*% betas + rnorm(240, 0, 3)
+
+# Some cleaning
+rm(list = c("Var_X", "i", "j"))

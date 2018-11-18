@@ -1,6 +1,6 @@
 # In a function: simple version that works
 # Assumes that X and y have already been properly standardized.
-lasso.solve <- function(y, X, lambda = .01, epsilon = .01){
+elasticNet.solve <- function(y, X, lambda_l1 = .01, lambda_l2 = .01, epsilon = .01){
 
   # get p
   p <- ncol(X)
@@ -35,7 +35,7 @@ lasso.solve <- function(y, X, lambda = .01, epsilon = .01){
       beta_star = cov(X[, j], r_j)
 
       # Update beta_j with soft_thresholding
-      betas[j] <- sign(beta_star) * max(c((abs(beta_star) - lambda), 0))
+      betas[j] <- sign(beta_star) * max(c((abs(beta_star) - lambda_l1), 0)) / (1 + lambda_l2)
 
     }
 
