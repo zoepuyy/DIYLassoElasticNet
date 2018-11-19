@@ -2,6 +2,11 @@
 # Assumes that X and y have already been properly standardized.
 lasso.solve <- function(y, X, lambda = .01, epsilon = .01){
 
+  # Rescale X
+  X <- scale(X)
+  # De-mean y
+  y <- y - mean(y)
+
   # get p
   p <- ncol(X)
 
@@ -12,7 +17,7 @@ lasso.solve <- function(y, X, lambda = .01, epsilon = .01){
   hasConverged <- FALSE
 
   #Keep track of the runs (useful for debugging)
-  run <- 1
+  #run <- 1
 
   while(!hasConverged){
 

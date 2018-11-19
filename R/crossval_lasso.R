@@ -97,9 +97,9 @@ plot_cv_lasso <- function(cv_results){
     geom_segment(aes(x=cv_results$best_lambda, xend=cv_results$best_lambda,
                      y=0, yend = dta[dta$is_best, "estimated_error"]),
                  lty = "dashed", size = .25, color = "green") +
-    ylab("Estimated Test MSE")
+    ylab("10-fold average cross-validation error")
 
 }
 
-cv.lasso(lambda_max = 3, step_lambda  = .1, n_folds = 10, y = y, X = X) %>%
+cv.lasso(lambda_max = 3, step_lambda  = .1, n_folds = 10, y = y, X = X, TRUE) %>%
   plot_cv_lasso()

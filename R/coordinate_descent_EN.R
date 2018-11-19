@@ -2,6 +2,10 @@
 # Assumes that X and y have already been properly standardized.
 elasticNet.solve <- function(y, X, lambda_l1 = .01, lambda_l2 = .01, epsilon = .01){
 
+  # rescale data
+  X <- scale(X)
+  y <- y - mean(y)
+
   # get p
   p <- ncol(X)
 
