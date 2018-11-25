@@ -1,6 +1,6 @@
 # In a function: simple version that works
 # Assumes that X and y have already been properly standardized.
-elasticNet.solve <- function(y, X, lambda_l1 = .01, lambda_l2 = .01, epsilon = .01){
+elasticNet.solve <- function(y, X, lambda = .01, alpha = .01, epsilon = .01){
 
   # rescale data
   X <- scale(X)
@@ -11,10 +11,20 @@ elasticNet.solve <- function(y, X, lambda_l1 = .01, lambda_l2 = .01, epsilon = .
 
   # Init all betas = 0
   betas <- numeric(p)
-
+  
+  #Initiate the optimal funtion f with current betas
+  #RSS is the Resisual Sum of Square
+  #the combination penalty term =lambda*[(1-alpha)*l2+alpha*l1]
+  #optimal funciton f=1/2n*RSS+penalty
+  
+  # RSS=t(y-x%*%betas)%*%(y-x%*%betas)
+  # penalty=lambda*((1-alpha)*sum(x*x)+alpha*sum(Abs(betas)))
+  # n=as.numeric (dim(y)[1])
+  # f=RSS/(2*n)+penalty
+  # 
   # Set hasConverged to False for now
   hasConverged <- FALSE
-
+  
   #Keep track of the runs (useful for debugging)
   run <- 1
 
@@ -43,12 +53,28 @@ elasticNet.solve <- function(y, X, lambda_l1 = .01, lambda_l2 = .01, epsilon = .
 
     }
 
-    # check convergence (no beta moved more than epsilon)
-    # NB: sum(c(FALSE, FALSE, FALSE)) => 0
-    hasConverged <- (sum(abs(betas_before - betas) > epsilon) == 0)
+    # # Get the new optimal funtion
+    # RSS=t(y-x%*%betas)%*%(y-x%*%betas)
+    # penalty=lambda*((1-alpha)*sum(x*x)+alpha*sum(Abs(betas)))
+    # n=as.numeric (dim(y)[1])
+    # f=RSS/(2*n)+penalty
+    # 
+    # diff_f=f-f_new
+    # 
+    # # check convergence, the difference of optimal functions is less thn elsilon
+    # hasConverged <- (abs(diff_f)> epsilon) == 0
 
-    #run <- run+1
+    ## not convergent! since little change in Betas results in huge change in f, it runs 70000times
+    
+    #if the both betas has the zeros in the same places, 
+    #and the diff less than epsilon,then convergent
+    Zeros=all((betas_before==0)==(betas==0))
+    Diff_nonzeros=sum(abs(betas_before - betas) > epsilon) == 0
+    hasConverged <- Zeros && Diff_nonzeros
+    
+    run <- run+1
+  
 
   }
-  return(betas)
+  return(list('betas'=betas,'run'=run))
 }
